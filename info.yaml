@@ -1,9 +1,9 @@
 # Tiny Tapeout project information
 project:
-  title:        ""      # Project title
-  author:       ""      # Your name
-  discord:      ""      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
-  description:  ""      # One line description of what your project does
+  title:        "JAM1ish 4-bit ALU"      # Project title
+  author:       "Ariggan Knight"      # Your name
+ #discord:      ""      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
+  description:  "4-bit ALU"      # One line description of what your project does
   language:     "Verilog" # other examples include SystemVerilog, Amaranth, VHDL, etc
   clock_hz:     0       # Clock frequency in Hz (or 0 if not applicable)
 
@@ -11,7 +11,7 @@ project:
   tiles: "1x1"          # Valid values: 1x1, 1x2, 2x2, 3x2, 4x2, 6x2 or 8x2
 
   # Your top module name must start with "tt_um_". Make it unique by including your github username:
-  top_module:  "tt_um_example"
+  top_module:  "tt_um_Arrigan_Knight_ALU4"
 
   # List your project's source files here.
   # Source files must be in ./src and you must list each source file separately, one per line.
@@ -23,32 +23,32 @@ project:
 # This section is for the datasheet/website. Use descriptive names (e.g., RX, TX, MOSI, SCL, SEG_A, etc.).
 pinout:
   # Inputs
-  ui[0]: ""
-  ui[1]: ""
-  ui[2]: ""
-  ui[3]: ""
-  ui[4]: ""
-  ui[5]: ""
-  ui[6]: ""
-  ui[7]: ""
+  ui[0]: "inputA[0]"
+  ui[1]: "inputA[1]"
+  ui[2]: "inputA[2]"
+  ui[3]: "inputA[3]"
+  ui[4]: "inputB[0]"
+  ui[5]: "inputB[1]"
+  ui[6]: "inputB[2]"
+  ui[7]: "inputB[3]"
 
   # Outputs
-  uo[0]: ""
-  uo[1]: ""
-  uo[2]: ""
-  uo[3]: ""
-  uo[4]: ""
-  uo[5]: ""
-  uo[6]: ""
-  uo[7]: ""
+  uo[0]: "output[0]"
+  uo[1]: "output[1]"
+  uo[2]: "output[2]"
+  uo[3]: "output[3]"
+  uo[4]: "flagout"
+  uo[5]: "flagout"
+  uo[6]: "flagout"
+  uo[7]: "flagout"
 
   # Bidirectional pins
-  uio[0]: ""
-  uio[1]: ""
-  uio[2]: ""
-  uio[3]: ""
-  uio[4]: ""
-  uio[5]: ""
+  uio[0]: "opcode[0]"
+  uio[1]: "opcode[1]"
+  uio[2]: "opcode[2]"
+  uio[3]: "opcode[3]"
+  uio[4]: "flagin"
+  uio[5]: "flagin"
   uio[6]: ""
   uio[7]: ""
 
