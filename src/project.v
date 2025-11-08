@@ -48,8 +48,8 @@ module tt_um_Ariggan_Knight_ALU4 (
         lc==2'b00 ? 0:
         lc==2'b01 ? rot_carry_in:
         lc==2'b10 ? inputA[0]:
-        lc==2'b11 ? inputA[3]
-    ;
+        lc==2'b11 ? inputA[3]:
+    0;
     always@(*) begin case(ls)
         2'b00: {rco,left} <= 5'b0;
         2'b01: {rco,left} <= {rci,inputA};
@@ -68,8 +68,8 @@ module tt_um_Ariggan_Knight_ALU4 (
         ac==2'b00 ? 0:
         ac==2'b01 ? 1:
         ac==2'b10 ? math_carry_in:
-        ac==2'b11 ? ~math_carry_in
-    ;
+        ac==2'b11 ? ~math_carry_in:
+    0;
     assign carry_prop = left ^ right;
     assign carry_gen = left & right;
     assign {aco,carry} = {0,carry_gen} | {1,carry_prop}&{carry,aci};
