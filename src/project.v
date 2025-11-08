@@ -20,36 +20,42 @@ module tt_um_Ariggan_Knight_ALU4 (
     wire se21, se11;            //subexpressions
     wire [1:0] lc, ls, ac;      //left carry, left select, adder carry
     wire [3:0] q, fn, op;       //opcode space quradrant, logic function, opcode
-    // op<-opcode<-uio_in[3:0];
-    // q = {op[3]&op[2], op[3]&~op[2], ~op[3]&op[2], ~op[3]&~op[2]};
-    // se21 = q[2]&~op[1]; se11 = q[1]&~op[1];
-    // lc[1] = q[2]&op[1]&op[0];
-    // lc[0] = q[3]&op[1] | q[2] | q[1] | q[0]&~op[1];
-    // ls[1] = q[3] | lc[1];
-    // ls[0] = q[3]&op[0] | lc[1] | se11;
-    // fn[3] = ~(op[3]&op[2] | op[0]);
-    // fn[2] = se21 | ~(op[3] | op[0]);
-    // fn[1] = se21 | fn[0];
-    // fn[0] = q[1]&op[0] | q[0]&~(op[1]&op[0]);
-    // ac[1] = se11 | q[0]&!(op[1]|op[0]);
-    // ac[0] = q[0]&!(op[1]^op[0]);
+    assign op = uio_in[3:0];
+    assign q = {op[3]&op[2], op[3]&~op[2], ~op[3]&op[2], ~op[3]&~op[2]};
+    assign se21 = q[2]&~op[1];
+    assign se11 = q[1]&~op[1];
+    assign lc[1] = q[2]&op[1]&op[0];
+    assign lc[0] = q[3]&op[1] | q[2] | q[1] | q[0]&~op[1];
+    assign ls[1] = q[3] | lc[1];
+    assign ls[0] = q[3]&op[0] | lc[1] | se11;
+    assign fn[3] = ~(op[3]&op[2] | op[0]);
+    assign fn[2] = se21 | ~(op[3] | op[0]);
+    assign fn[1] = se21 | fn[0];
+    assign fn[0] = q[1]&op[0] | q[0]&~(op[1]&op[0]);
+    assign ac[1] = se11 | q[0]&!(op[1]|op[0]);
+    assign ac[0] = q[0]&!(op[1]^op[0]);
 
     wire math_carry_in, rot_carry_in;
     wire [3:0] inputA, inputB, left, right, out;
-    // inputA = ui_in[3:0]; inputB = ui_in[7:4];
-    // math_carry_in = uio_in[4];
-    // rot_carry_in = uio_in[5];
+    assign inputA = ui_in[3:0];
+    assign inputB = ui_in[7:4];
+    assign math_carry_in = uio_in[4];
+    assign rot_carry_in = uio_in[5];
 
     ///rotation & shifting
     wire rci, rco;
-    // lc==0 -> rci <- 0;
-    // lc==1 -> rci <- rot_carry_in;
-    // lc==2 -> rci <- inputA[0];
-    // lc==3 -> rci <- inputA[3];
-    // ls==0 -> {rco,left} <- 5'b0;
-    // ls==1 -> {rco,left} <- {rci,inputA};
-    // ls==2 -> {rco,left} <- {inputA,rci};
-    // ls==3 -> {left,rco} <- {rci,inputA};
+    assign rci =
+        lc==2'b00 ? 0:
+        lc==2'b01 ? rot_carry_in:
+        lc==2'b10 ? inputA[0]:
+        lc==2'b11 ? inputA[3]
+    ;
+    always@(*) begin case(ls)
+        2'b00: {rco,left} <= 5'b0;
+        2'b01: {rco,left} <= {rci,inputA};
+        2'b10: {rco,left} <= {inputA,rci};
+        2'b11: {left,rco} <= {rci,inputA};
+    endcase end
 
     ///logic using a LUT
     // for x=[3:0], right[x] <- fn[ {inputB[x],inputA[x]} ]
@@ -58,24 +64,28 @@ module tt_um_Ariggan_Knight_ALU4 (
     wire aci, aco;
     wire [3:0] carry_prop, carry_gen, carry;
     wire [4:0] sum;
-    // ac==0 -> aci <- 0;
-    // ac==1 -> aci <- 1;
-    // ac==2 -> aci <- math_carry_in;
-    // ac==3 -> aci <- ~math_carry_in;
-    //   //((aci <- ac1^(cin+ac0) | !ac1^ac0))
-    //   //{aco,sum} <- left+right+aci;
-    // carry_prop = left ^ right; carry_gen = left & right;
-    // {aco,carry} = {0,carry_gen} | {1,carry_prop}^{carry,aci};
-    // sum = {0,carry_prop} ^ {carry,aci};
-    // out = sum[3:0];
+    assign aci =
+        ac==2'b00 ? 0:
+        ac==2'b01 ? 1:
+        ac==2'b10 ? math_carry_in:
+        ac==2'b11 ? ~math_carry_in
+    ;
+    assign carry_prop = left ^ right;
+    assign carry_gen = left & right;
+    assign {aco,carry} = {0,carry_gen} | {1,carry_prop}&{carry,aci};
+    assign sum = {0,carry_prop} ^ {carry,aci};
+    //((aci = ac[1]&(math_carry_in ^ ac[0]) | ~ac[1]&ac[0]))
+    //{aco,sum} = left+right+aci;
+    assign out = sum[3:0];
 
     ///flags
-    wire overflow_out, zero_out, zflag, math_carry_out, rot_carry_out;
+    wire overflow_out, zero_out, lastz, math_carry_out, rot_carry_out;
     wire [3:0] zero;
-    // math_carry_out = aco;
-    // rot_carry_out = rco;
-    // overflow_out = aco ^ carry[3];
-    // {zflag,zero} = ~{0,sum}&{zero,1}; zero_out = zflag; //zero <- ~|sum;
+    assign math_carry_out = aco;
+    assign rot_carry_out = rco;
+    assign overflow_out = aco ^ carry[3];
+    assign {topz,zero} = ~{0,sum}&{zero,1}; //zero = ~|sum;
+    assign zero_out = lastz;
 
     // uo_out[3:0] = out;
     // uo_out[4] = math_carry_out;
