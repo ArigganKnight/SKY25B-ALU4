@@ -36,25 +36,27 @@ module tt_um_Ariggan_Knight_ALU4 (
     assign ac[0] = q[0]&!(op[1]^op[0]);
 
     wire math_carry_in, rot_carry_in;
-    wire [3:0] inputA, inputB, left, right, out;
+    wire [3:0] inputA, inputB, right, out;
+    reg [3:0] left;
     assign inputA = ui_in[3:0];
     assign inputB = ui_in[7:4];
     assign math_carry_in = uio_in[4];
     assign rot_carry_in = uio_in[5];
 
     ///rotation & shifting
-    wire rci, rco;
+    wire rci;
+    reg rco;
     assign rci =
         lc==2'b00 ? 0:
         lc==2'b01 ? rot_carry_in:
         lc==2'b10 ? inputA[0]:
         lc==2'b11 ? inputA[3]:
     0;
-    case(ls)
-        2'b00: assign {rco,left} = 5'b0;
-        2'b01: assign {rco,left} = {rci,inputA};
-        2'b10: assign {rco,left} = {inputA,rci};
-        2'b11: assign {left,rco} = {rci,inputA};
+    always@(*) case(ls)
+        2'b00: {rco,left} <= 5'b0;
+        2'b01: {rco,left} <= {rci,inputA};
+        2'b10: {rco,left} <= {inputA,rci};
+        2'b11: {left,rco} <= {rci,inputA};
     endcase
 
     ///logic using a LUT
