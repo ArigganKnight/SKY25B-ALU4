@@ -51,10 +51,10 @@ module tt_um_Ariggan_Knight_ALU4 (
         lc==2'b11 ? inputA[3]:
     0;
     always@(*) begin case(ls)
-        2'b00: {rco,left} <= 5'b0;
-        2'b01: {rco,left} <= {rci,inputA};
-        2'b10: {rco,left} <= {inputA,rci};
-        2'b11: {left,rco} <= {rci,inputA};
+        2'b00: assign {rco,left} = 5'b0;
+        2'b01: assign {rco,left} = {rci,inputA};
+        2'b10: {rco,left} = {inputA,rci};
+        2'b11: {left,rco} = {rci,inputA};
     endcase end
 
     ///logic using a LUT
