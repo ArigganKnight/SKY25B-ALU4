@@ -60,7 +60,7 @@ module tt_um_Ariggan_Knight_ALU4 (
     endcase
 
     ///logic using a LUT
-    // for x=[3:0], right[x] <- fn[ {inputB[x],inputA[x]} ]
+    for(x=0; x < 4; x=x+1) assign right[x] = fn[ {inputB[x],inputA[x]} ];
 
     ///arithmatic
     wire aci, aco;
@@ -71,13 +71,12 @@ module tt_um_Ariggan_Knight_ALU4 (
         ac==2'b01 ? 1:
         ac==2'b10 ? math_carry_in:
         ac==2'b11 ? ~math_carry_in:
-    0;
+    0;        //((aci = ac[1]&(math_carry_in ^ ac[0]) | ~ac[1]&ac[0]))
     assign carry_prop = left ^ right;
     assign carry_gen = left & right;
     assign {aco,carry} = {1'b0,carry_gen} | {1'b1,carry_prop}&{carry,aci};
     assign sum = {1'b0,carry_prop} ^ {carry,aci};
-    //((aci = ac[1]&(math_carry_in ^ ac[0]) | ~ac[1]&ac[0]))
-    //{aco,sum} = left+right+aci; w/4-bit sum
+        //{aco,sum} = left+right+aci; w/4-bit sum
     assign out = sum[3:0];
 
     ///flags
