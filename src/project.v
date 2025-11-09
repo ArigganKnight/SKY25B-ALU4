@@ -86,7 +86,7 @@ module tt_um_Ariggan_Knight_ALU4 (
     assign math_carry_out = aco;
     assign rot_carry_out = rco;
     assign overflow_out = aco ^ carry[3];
-    assign {lastz,zero} = ~{1'b0,sum}&{zero,1'b1}; //zero_out = ~|sum;
+    assign {lastz,zero} = ~sum&{zero,1'b1}; //zero_out = ~|sum;
     assign zero_out = lastz;
 
     // uo_out[3:0] = out;
