@@ -74,8 +74,8 @@ module tt_um_Ariggan_Knight_ALU4 (
     0;
     assign carry_prop = left ^ right;
     assign carry_gen = left & right;
-    assign {aco,4'carry} = {0,4'carry_gen} | {1,4'carry_prop}&{4'carry,aci};
-    assign sum = {0,4'carry_prop} ^ {4'carry,aci};
+    assign {aco,carry} = {0,carry_gen} | {1,carry_prop}&{carry,aci};
+    assign sum = {0,carry_prop} ^ {carry,aci};
     //((aci = ac[1]&(math_carry_in ^ ac[0]) | ~ac[1]&ac[0]))
     //{aco,sum} = left+right+aci; w/4-bit sum
     assign out = sum[3:0];
