@@ -60,6 +60,7 @@ module tt_um_Ariggan_Knight_ALU4 (
     endcase
 
     ///logic using a LUT
+    genvar x;
     for(x=0; x < 4; x=x+1) assign right[x] = fn[ {inputB[x],inputA[x]} ];
 
     ///arithmatic
