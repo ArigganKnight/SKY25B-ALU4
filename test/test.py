@@ -24,6 +24,9 @@ class opcode(Enum):
     RCL=14
     RCR=15
 
+# class test{A:4, B:4, opcode:4, aci:1, rci:1, sum:4, aco:1, rco:1, vf:1, zf:1};
+# test[]={ };
+
 @cocotb.test()
 async def test_project(dut):
     dut._log.info("Start")
@@ -43,22 +46,41 @@ async def test_project(dut):
 
     dut._log.info("Test project behavior")
 
-    cri,aci,opcode,B,A=?
-    zf,vf,rco,aco,sum=?
+    # Prepare the values for the next test
+    # A=test[x].A
+    # B=test[x].B
+    # opcode=test[x].opcode
+    # aci=test[x].aci
+    # rci=test[x].rci
 
-    # Set the input values you want to test
+    # sum=test[x].sum
+    # aco=test[x].aco
+    # rco=test[x].rco
+    # overflow=test[x].overflow
+    # zero=test[x].zero
+
+    # Put the input into the device
     #dut.uio_in.value = (0,0,rci,aci,opcode)
     #dut.ui_in.value = (B,A)
     dut.ui_in.value = 20
     dut.uio_in.value = 30
 
-    # Wait for one clock cycle to see the output values
+    # Wait for one clock cycle
     await ClockCycles(dut.clk, 1)
 
-    # The following assersion is just an example of how to check the output values.
-    # Change it to match the actual expected output of your module:
-    assert dut.uo_out.value == 50
-    #assert dut.uo_out.value == (zf,vf,rco,aco,sum)
+    # Extract the output from the device
+    # sum = dut.uo_out.value[3:0]
+    # aco = dut.uo_out.value[4]
+    # rco = dut.uo_out.value[5]
+    # overflow = dut.uo_out.value[6]
+    # zero = dut.uo_out.value[7]
 
-    # Keep testing the module by changing the input values, waiting for
-    # one or more clock cycles, and asserting the expected output values.
+    # Check the results against the expectation
+    assert dut.uo_out.value == 50
+    # assert sum == sum
+    # assert aco == aco
+    # assert rco == rco
+    # assert overflow == overflow
+    # assert zero == zero
+
+    # Repeat
