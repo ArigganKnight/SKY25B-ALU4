@@ -78,11 +78,11 @@ async def test_project(dut):
 
     # Extract the output from the device
     out = dut.uo_out.value
-    sum = out&15
-    aco = (out>>4)&1
-    rco = (out>>5)&1
-    overflow = (out>>6)&1
-    zero = (out>>7)&1
+    sum = out[0:4]
+    aco = out[4]
+    rco = out[5]
+    overflow = out[6]
+    zero = out[7]
 
     # Check the results against the expectation
     assert dut.uo_out.value == 50
