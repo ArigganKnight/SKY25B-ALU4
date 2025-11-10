@@ -85,10 +85,10 @@ async def test_project(dut):
     zero = out[7]
 
     # Check the results against the expectation
-    assert tests[x].sum == sum, str("sum:",tests[x].sum,"==",sum)
-    assert tests[x].aco == aco, str("aco:",tests[x].aco,"==",aco)
-    assert tests[x].rco == rco, str("rco:",tests[x].rco,"==",rco)
-    assert tests[x].overflow == overflow, "overflow: "+tests[x].overflow+" == "+overflow
-    assert tests[x].zero == zero, "zero: "+tests[x].zero+" == "+zero
+    assert tests[x].sum == sum, "sum: {} == {}".format(tests[x].sum, sum)
+    assert tests[x].aco == aco, "aco: {} == {}".format(tests[x].aco, aco)
+    assert tests[x].rco == rco, "rco: {} == {}".format(tests[x].rco, rco)
+    assert tests[x].overflow == overflow, "overflow: {} == {}".format(tests[x].overflow, overflow)
+    assert tests[x].zero == zero, "zero: {} == {}".format(tests[x].zero, zero)
 
     # Repeat
