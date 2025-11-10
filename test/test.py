@@ -15,6 +15,7 @@ class expected():
         self.zero=z
 
 class op(IntEnum):
+    def getExpected(self, A, B, aci, rci):
     def _nop(self, A, B, aci, rci):
         return expected(0, aci, rci, 0, 1)
     NOP=0
