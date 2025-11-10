@@ -24,8 +24,23 @@ class opcode(Enum):
     RCL=14
     RCR=15
 
+class test:
+    def __init__(self, a, b, op, aci, rci, sum, aco, rco, over, zero):
+        self.A=a
+        self.B=b
+        self.opcode=op
+        self.aci=aci
+        self.rci=rci
+        self.sum=sum
+        self.aco=aco
+        self.rco=rco
+        self.overflow=over
+        self.zero=zero
+
 # class test{A:4, B:4, opcode:4, aci:1, rci:1, sum:4, aco:1, rco:1, vf:1, zf:1};
-# test[]={ };
+tests = [
+    test( 2,3,ADD,0,0, 5, 0,0,0,0 )
+]
 
 @cocotb.test()
 async def test_project(dut):
@@ -47,40 +62,34 @@ async def test_project(dut):
     dut._log.info("Test project behavior")
 
     # Prepare the values for the next test
-    # A=test[x].A
-    # B=test[x].B
-    # opcode=test[x].opcode
-    # aci=test[x].aci
-    # rci=test[x].rci
-
-    # sum=test[x].sum
-    # aco=test[x].aco
-    # rco=test[x].rco
-    # overflow=test[x].overflow
-    # zero=test[x].zero
+    x=0
+    A=tests[x].A
+    B=tests[x].B
+    opcode=tests[x].opcode
+    aci=tests[x].aci
+    rci=tests[x].rci
 
     # Put the input into the device
-    #dut.uio_in.value = (0,0,rci,aci,opcode)
-    #dut.ui_in.value = (B,A)
-    dut.ui_in.value = 20
-    dut.uio_in.value = 30
+    dut.ui_in.value = B<<4|A
+    dut.uio_in.value = rci<<5 | aci<<4 |opcode
 
     # Wait for one clock cycle
     await ClockCycles(dut.clk, 1)
 
     # Extract the output from the device
-    # sum = dut.uo_out.value[3:0]
-    # aco = dut.uo_out.value[4]
-    # rco = dut.uo_out.value[5]
-    # overflow = dut.uo_out.value[6]
-    # zero = dut.uo_out.value[7]
+    out = dut.uo_out.value
+    sum = out&15
+    aco = (out>>4)&1
+    rco = (out>>5)&1
+    overflow = (out>>6)&1
+    zero = (out>>7)&1
 
     # Check the results against the expectation
     assert dut.uo_out.value == 50
-    # assert sum == sum
-    # assert aco == aco
-    # assert rco == rco
-    # assert overflow == overflow
-    # assert zero == zero
+    assert sum == tests[x].sum
+    assert aco == tests[x].aco
+    assert rco == tests[x].rco
+    assert overflow == tests[x].overflow
+    assert zero == tests[x].zero
 
     # Repeat
