@@ -6,7 +6,7 @@ from enum import Enum
 from cocotb.clock import Clock
 from cocotb.triggers import ClockCycles
 
-class opcode(Enum):
+class op(Enum):
     NOP=0
     NEG=1
     STC=2
@@ -39,7 +39,7 @@ class test:
 
 # class test{A:4, B:4, opcode:4, aci:1, rci:1, sum:4, aco:1, rco:1, vf:1, zf:1};
 tests = [
-    test( 2,3,ADD,0,0, 5, 0,0,0,0 )
+    test( 2,3,op.ADD,0,0, 5, 0,0,0,0 )
 ]
 
 @cocotb.test()
@@ -70,8 +70,8 @@ async def test_project(dut):
     rci=tests[x].rci
 
     # Put the input into the device
-    dut.ui_in.value = B<<4|A
-    dut.uio_in.value = rci<<5 | aci<<4 |opcode
+    dut.ui_in.value = (B<<4) | A
+    dut.uio_in.value = (rci<<5) | (aci<<4) | opcode
 
     # Wait for one clock cycle
     await ClockCycles(dut.clk, 1)
@@ -86,10 +86,10 @@ async def test_project(dut):
 
     # Check the results against the expectation
     assert dut.uo_out.value == 50
-    assert sum == tests[x].sum
-    assert aco == tests[x].aco
-    assert rco == tests[x].rco
-    assert overflow == tests[x].overflow
-    assert zero == tests[x].zero
+    assert tests[x].sum == sum, "sum: "+tests[x].sum+" == "+sum
+    assert tests[x].aco == aco, "aco: "+tests[x].aco+" == "+aco
+    assert tests[x].rco == rco, "rco: "+tests[x].rco+" == "+rco
+    assert tests[x].overflow == overflow, "overflow: "+tests[x].overflow+" == "+overflow
+    assert tests[x].zero == zero, "zero: "+tests[x].zero+" == "+zero
 
     # Repeat
