@@ -39,6 +39,8 @@ class test:
 
 # class test{A:4, B:4, opcode:4, aci:1, rci:1, sum:4, aco:1, rco:1, vf:1, zf:1};
 tests = [
+    test( 6,3,op.STC,0,0, 0,1,0,0,0 ),
+    test( 6,3,op.CLC,0,0, 0,0,0,0,0 ),
     test( 6,3,op.ADD,0,0, 9,0,0,0,0 )
 ]
 
@@ -61,39 +63,40 @@ async def test_project(dut):
 
     dut._log.info("Test project behavior")
 
-    # Prepare the values for the next test
-    x=0
-    A=tests[x].A
-    B=tests[x].B
-    opcode=int(tests[x].opcode)
-    aci=tests[x].aci
-    rci=tests[x].rci
+    for test in tests:
+        # Prepare the values for the next test
+        A=test.A
+        B=test.B
+        opcode=int(test.opcode)
+        aci=test.aci
+        rci=test.rci
 
-    # Put the input into the device
-    dut.ui_in.value[3:0] = A
-    dut.ui_in.value[7:4] = B
-    dut.uio_in.value[3:0] = opcode
-    dut.uio_in.value[4] = aci
-    dut.uio_in.value[5] = rci
-    dut.uio_in.value[7:6] = 0
-    # dut.uio_in.value = (rci<<5) | (aci<<4) | opcode
+        # Put the input into the device
+        dut.ui_in.value[3:0] = A
+        dut.ui_in.value[7:4] = B
+        dut.uio_in.value[3:0] = opcode
+        dut.uio_in.value[4] = aci
+        dut.uio_in.value[5] = rci
+        dut.uio_in.value[7:6] = 0
+        # dut.uio_in.value = (rci<<5) | (aci<<4) | opcode
 
-    # Wait for one clock cycle
-    await ClockCycles(dut.clk, 1)
+        # Wait for one clock cycle
+        await ClockCycles(dut.clk, 1)
 
-    # Extract the output from the device
-    out = dut.uo_out.value
-    sum = out[3:0]
-    aco = out[4]
-    rco = out[5]
-    overflow = out[6]
-    zero = out[7]
+        # Extract the output from the device
+        out = dut.uo_out.value
+        sum = out[3:0]
+        aco = out[4]
+        rco = out[5]
+        overflow = out[6]
+        zero = out[7]
 
-    # Check the results against the expectation
-    assert tests[x].sum == sum, "sum: {} == {}".format(tests[x].sum, sum)
-    # assert tests[x].aco == aco, "aco: {} == {}".format(tests[x].aco, aco)
-    # assert tests[x].rco == rco, "rco: {} == {}".format(tests[x].rco, rco)
-    # assert tests[x].overflow == overflow, "overflow: {} == {}".format(tests[x].overflow, overflow)
-    # assert tests[x].zero == zero, "zero: {} == {}".format(tests[x].zero, zero)
+        # Check the results against the expectation
+        dut._log.info("Testing {}".format(test.opcode))
+        assert test.sum == sum, "sum: {} == {}".format(test.sum, sum)
+        # assert test.aco == aco, "aco: {} == {}".format(test.aco, aco)
+        # assert test.rco == rco, "rco: {} == {}".format(test.rco, rco)
+        # assert test.overflow == overflow, "overflow: {} == {}".format(test.overflow, overflow)
+        # assert test.zero == zero, "zero: {} == {}".format(test.zero, zero)
 
     # Repeat
