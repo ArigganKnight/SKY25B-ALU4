@@ -85,7 +85,6 @@ async def test_project(dut):
     zero = out[7]
 
     # Check the results against the expectation
-    assert dut.uo_out.value == 50
     assert tests[x].sum == sum, "sum: "+tests[x].sum+" == "+sum
     assert tests[x].aco == aco, "aco: "+tests[x].aco+" == "+aco
     assert tests[x].rco == rco, "rco: "+tests[x].rco+" == "+rco
