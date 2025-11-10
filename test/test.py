@@ -70,7 +70,7 @@ async def test_project(dut):
     rci=tests[x].rci
 
     # Put the input into the device
-    dut.ui_in[3:0].value = A
+    dut.ui_in.value[3:0] = A
     dut.ui_in[7:4].value = B
     dut.uio_in[3:0].value = opcode
     dut.uio_in[4].value = aci
