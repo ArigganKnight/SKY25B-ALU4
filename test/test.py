@@ -71,11 +71,11 @@ async def test_project(dut):
 
     # Put the input into the device
     dut.ui_in.value[3:0] = A
-    dut.ui_in[7:4].value = B
-    dut.uio_in[3:0].value = opcode
-    dut.uio_in[4].value = aci
-    dut.uio_in[5].value = rci
-    dut.uoi_in[7:6].value = 0
+    dut.ui_in.value[7:4] = B
+    dut.uio_in.value[3:0] = opcode
+    dut.uio_in.value[4] = aci
+    dut.uio_in.value[5] = rci
+    dut.uoi_in.value[7:6] = 0
     # dut.uio_in.value = (rci<<5) | (aci<<4) | opcode
 
     # Wait for one clock cycle
