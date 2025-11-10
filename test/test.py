@@ -92,7 +92,7 @@ async def test_project(dut):
         zero = out[7]
 
         # Check the results against the expectation
-        dut._log.info("Testing {}".format(test.opcode))
+        dut._log.info("Testing {}".format(test.opcode.name))
         assert test.sum == sum, "sum: {} == {}".format(test.sum, sum)
         # assert test.aco == aco, "aco: {} == {}".format(test.aco, aco)
         # assert test.rco == rco, "rco: {} == {}".format(test.rco, rco)
