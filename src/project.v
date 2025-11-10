@@ -92,6 +92,7 @@ module tt_um_Ariggan_Knight_ALU4 (
     assign uo_out[3:0] = out;
     assign uo_out[4] = math_carry_out;
     assign uo_out[5] = rot_carry_out;
+    assign uo_out[7:6] = 2'b00;
 
     // assign uo_out  = ui_in + uio_in;  // Example: uo_out is the sum of ui_in and uio_in
 
