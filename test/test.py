@@ -75,7 +75,7 @@ async def test_project(dut):
     dut.uio_in.value[3:0] = opcode
     dut.uio_in.value[4] = aci
     dut.uio_in.value[5] = rci
-    dut.uoi_in.value[7:6] = 0
+    dut.uio_in.value[7:6] = 0
     # dut.uio_in.value = (rci<<5) | (aci<<4) | opcode
 
     # Wait for one clock cycle
