@@ -7,7 +7,7 @@ from cocotb.clock import Clock
 from cocotb.triggers import ClockCycles
 
 class expected():
-    def __init__(self, out, ac, rc, v, z)
+    def __init__(self, out, ac, rc, v, z):
         self.out=out
         self.aco=ac
         self.rco=rc
