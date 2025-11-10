@@ -2,11 +2,11 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import cocotb
-from enum import Enum
+from enum import IntEnum
 from cocotb.clock import Clock
 from cocotb.triggers import ClockCycles
 
-class op(Enum):
+class op(IntEnum):
     NOP=0
     NEG=1
     STC=2
