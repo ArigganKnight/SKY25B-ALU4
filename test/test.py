@@ -65,7 +65,7 @@ async def test_project(dut):
     x=0
     A=tests[x].A
     B=tests[x].B
-    opcode=tests[x].opcode
+    opcode=int(tests[x].opcode)
     aci=tests[x].aci
     rci=tests[x].rci
 
