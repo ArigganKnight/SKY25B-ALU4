@@ -89,17 +89,17 @@ module tt_um_Ariggan_Knight_ALU4 (
     assign {lastz,zero} = ~sum&{zero,1'b1}; //zero_out = ~|sum;
     assign zero_out = lastz;
 
-    // uo_out[3:0] = out;
-    // uo_out[4] = math_carry_out;
-    // uo_out[5] = rot_carry_out;
+    assign uo_out[3:0] = out;
+    assign uo_out[4] = math_carry_out;
+    assign uo_out[5] = rot_carry_out;
 
-    assign uo_out  = ui_in + uio_in;  // Example: uo_out is the sum of ui_in and uio_in
+    // assign uo_out  = ui_in + uio_in;  // Example: uo_out is the sum of ui_in and uio_in
 
     //Bidir outputs will not be used, but they must still be assigned to.
     assign uio_out = 0;
     assign uio_oe  = 0;
     // List all unused inputs to prevent warnings
-    wire _unused = &{ena, clk, rst_n, 1'b0};
-    // wire _unused = &{ena, clk, rst_n, ui_in[7], ui_in[6], 1'b0};
+    // wire _unused = &{ena, clk, rst_n, 1'b0};
+    wire _unused = &{ena, clk, rst_n, ui_in[7], ui_in[6], 1'b0};
 
 endmodule
